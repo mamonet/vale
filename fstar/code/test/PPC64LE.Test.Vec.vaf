@@ -1,0 +1,39 @@
+include "../arch/ppc64le/PPC64LE.Vale.InsBasic.vaf"
+include "../arch/ppc64le/PPC64LE.Vale.InsMem.vaf"
+include "../arch/ppc64le/PPC64LE.Vale.InsVector.vaf"
+
+module PPC64LE.Test.Vec
+
+#verbatim{:interface}{:implementation}
+open PPC64LE.Machine_s
+open PPC64LE.Vale.Decls
+open PPC64LE.Vale.InsBasic
+open PPC64LE.Vale.InsMem
+open PPC64LE.Vale.InsVector
+#endverbatim
+
+procedure test_vec()
+    requires
+        v0 = Mkfour(0,0,0,0);
+        v2 = Mkfour(1,1,1,1);
+        r5 = 0;
+        valid_mem64(r3, mem);
+        valid_mem64(r3 + 8, mem);
+    reads
+        r3; v2;
+    modifies
+        r4; r5; v0; v1; mem;
+{
+    Load64(r4, Mem64(r3, 0));
+    Load64(r5, Mem64(r3, 8));
+    Mtvsrdd(v1, r4, r5);
+    Vsldoi4(v1, v1, v0);
+    Vcmpequw(v0, v0, v1);
+    Vxor(v0, v0, v1);
+    Vslw(v0, v0, v2);
+    Vsrw(v0, v0, v2);
+    Mfvsrd(r4, v0);
+    Mfvsrld(r5, v0);
+    Store64(r4, Mem64(r3, 0));
+    Store64(r5, Mem64(r3, 8));
+}

@@ -1,0 +1,41 @@
+include "../arch/ppc64le/PPC64LE.Vale.InsBasic.vaf"
+
+module PPC64LE.Test.Ins
+
+#verbatim{:interface}{:implementation}
+open PPC64LE.Machine_s
+open PPC64LE.Vale.Decls
+open PPC64LE.Vale.InsBasic
+#endverbatim
+
+procedure test_ins()
+    requires
+        r3 = 32;
+    reads
+        r3;
+    modifies
+        r4; cr0; xer;
+{
+    Move(r4, r3);
+    AddLa(r4, r3, (-0x10));
+    Add(r4, r4, r3);
+    AddImm(r4, r3, 64);
+    AddExtended(r4, r4, r3);
+    AddExtendedOV(r4, r4, r3);
+    Sub(r4, r4, r3);
+    SubImm(r4, r3, 16);
+    if (r4 < r3)
+    {
+        Move(r4, r3);
+    }
+    MulLow64(r4, r4, r3);
+    MulHigh64U(r4, r4, r3);
+    Xor(r4, r4, r3);
+    And(r4, r4, r3);
+    Sr64Imm(r4, r3, 8);
+    Sl64Imm(r4, r3, 16);
+    if (r4 == 0)
+    {
+        Move(r4, r3);
+    }
+}
