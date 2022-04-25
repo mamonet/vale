@@ -135,6 +135,9 @@ let print_ins (ins:ins) (p:printer) =
   let print_reg_triple (dst src1 src2:reg) =
     print_triple (print_reg dst p) (print_reg src1 p) (print_reg src2 p)
   in
+  let print_reg_imm (dst:reg) (src:int) =
+    print_pair (print_reg dst p) (p.const src)
+  in
   let print_reg_pair_imm (dst src1:reg) (src2:int) =
     print_triple (print_reg dst p) (print_reg src1 p) (p.const src2)
   in
@@ -154,6 +157,7 @@ let print_ins (ins:ins) (p:printer) =
   | Move dst src -> "  mr " ^ print_reg_pair dst src
   | Load64 dst src -> "  ld " ^ print_reg_mem dst src
   | Store64 src dst -> "  std " ^ print_reg_mem src dst
+  | LoadImm64 dst src -> "  li " ^ print_reg_imm dst src
   | AddLa dst src1 src2 -> "  la " ^ print_reg_mem dst ({ address = src1; offset = src2 })
   | Add dst src1 src2 -> "  add " ^ print_reg_triple dst src1 src2
   | AddImm dst src1 src2 -> "  addi " ^ print_reg_pair_imm dst src1 src2
@@ -214,9 +218,9 @@ and print_code (c:code) (n:int) (p:printer) : string & int =
     let n1 = n in
     let n2 = n + 1 in
     let branch = "  b L" ^ string_of_int n2 ^ "\n" in
-    let label1 = p.align() ^ " 16\nL" ^ string_of_int n1 ^ ":\n" in
+    let label1 = p.align() ^ " 4\nL" ^ string_of_int n1 ^ ":\n" in
     let (body_str, n') = print_code body (n + 2) p in
-    let label2 = p.align() ^ " 16\nL" ^ string_of_int n2 ^ ":\n" in
+    let label2 = p.align() ^ " 4\nL" ^ string_of_int n2 ^ ":\n" in
     let cmp = print_cmp cond n1 p in
     (branch ^ label1 ^ body_str ^ label2 ^ cmp, n')
 

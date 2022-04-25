@@ -79,6 +79,7 @@ var v29:quad32 {:state vec(V29)};
 var v30:quad32 {:state vec(V30)};
 var v31:quad32 {:state vec(V31)};
 
+// Input operands of vector registers
 operand_type vec_opr:quad32 :=
 | in v0 | in v1 | in v2 | in v3
 | in v4 | in v5 | in v6 | in v7
@@ -89,6 +90,7 @@ operand_type vec_opr:quad32 :=
 | in v24 | in v25 | in v26 | in v27
 | in v28 | in v29 | in v30 | in v31
 ;
+// Output operands of vector registers
 operand_type dst_vec_opr:quad32 :=
 | out v0 | out v1 | out v2 | out v3 | out v4
 | out v5 | out v6 | out v7 | out v8 | out v9
@@ -99,6 +101,7 @@ operand_type dst_vec_opr:quad32 :=
 | out v30 | out v31
 ;
 
+// Move high 64-bit of vector register to general-purpose register
 procedure Mfvsrd(out dst:dst_reg_opr, in src:vec_opr)
     {:public}
     {:instruction Ins(S.Mfvsrd(dst, src))}
@@ -107,6 +110,7 @@ procedure Mfvsrd(out dst:dst_reg_opr, in src:vec_opr)
 {
 }
 
+// Move low 64-bit of vector register to general-purpose register
 procedure Mfvsrld(out dst:dst_reg_opr, in src:vec_opr)
     {:public}
     {:instruction Ins(S.Mfvsrld(dst, src))}
@@ -115,6 +119,7 @@ procedure Mfvsrld(out dst:dst_reg_opr, in src:vec_opr)
 {
 }
 
+// Move joint of two general-purpose registers to vector register
 procedure Mtvsrdd(out dst:dst_vec_opr, in src1:reg_opr, in src2:reg_opr)
     {:public}
     {:instruction Ins(S.Mtvsrdd(dst, src1, src2))}
@@ -124,6 +129,7 @@ procedure Mtvsrdd(out dst:dst_vec_opr, in src1:reg_opr, in src2:reg_opr)
 {
 }
 
+// XOR operation of two vector registers
 procedure Vxor(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
     {:public}
     {:instruction Ins(S.Vxor(dst, src1, src2))}
@@ -132,6 +138,7 @@ procedure Vxor(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
 {
 }
 
+// Shift left word elements of vector register with correspinding bit values in word elements of vector register
 procedure Vslw(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
     {:public}
     {:instruction Ins(S.Vslw(dst, src1, src2))}
@@ -144,6 +151,7 @@ procedure Vslw(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
 {
 }
 
+// Shift right word elements of vector register with corresponding bit values in word elements of vector register
 procedure Vsrw(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
     {:public}
     {:instruction Ins(S.Vsrw(dst, src1, src2))}
@@ -156,6 +164,7 @@ procedure Vsrw(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
 {
 }
 
+//  Compare equal word elements of vector register and store either ones or zeros in the corresponding elements of destination register
 procedure Vcmpequw(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
     {:public}
     {:instruction Ins(S.Vcmpequw(dst, src1, src2))}
@@ -168,6 +177,7 @@ procedure Vcmpequw(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
 {
 }
 
+// Joint of last one word of vector register with first 3 words of vector register
 procedure Vsldoi4(out dst:dst_vec_opr, in src1:vec_opr, in src2:vec_opr)
     {:public}
     {:instruction Ins(S.Vsldoi(dst, src1, src2, 4))}

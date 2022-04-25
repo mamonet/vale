@@ -52,6 +52,7 @@ procedure Mem64_lemma(ghost address:reg_opr, ghost offset:int)
 {
 }
 
+// Load from 64-bit memory to general-purpose register
 procedure MemLoad64(out dst:dst_reg_opr, in src:reg_opr, inline offset:int)
     {:public}
     reads
@@ -65,6 +66,7 @@ procedure MemLoad64(out dst:dst_reg_opr, in src:reg_opr, inline offset:int)
     Load64(dst, Mem64(src, offset));
 }
 
+// Store general-purpose register to 64-bit memory
 procedure MemStore64(in src:reg_opr, in dst:reg_opr, inline offset:int)
     {:public}
     modifies

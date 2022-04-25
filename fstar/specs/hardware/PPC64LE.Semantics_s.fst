@@ -15,6 +15,7 @@ type ins =
   | Move         : dst:reg -> src:reg -> ins
   | Load64       : dst:reg -> src:maddr -> ins
   | Store64      : src:reg -> dst:maddr -> ins
+  | LoadImm64    : dst:reg -> src:simm16 -> ins
   | AddLa        : dst:reg -> src1:reg -> src2:simm16 -> ins
   | Add          : dst:reg -> src1:reg -> src2:reg -> ins
   | AddImm       : dst:reg -> src1:reg -> src2:simm16 -> ins
@@ -183,6 +184,9 @@ let eval_ins (ins:ins) : st unit =
   | Store64 src dst ->
     check (valid_maddr64 dst);;
     update_mem64 (eval_maddr dst s) (eval_reg src s)
+
+  | LoadImm64 dst src ->
+    update_reg dst (int_to_nat64 src)
 
   | AddLa dst src1 src2 ->
     update_reg dst ((eval_reg src1 s + src2) % pow2_64)
